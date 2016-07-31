@@ -12,8 +12,8 @@ _"The Wizard of Evergreen Terrace"_
 ???
 Hi fellow Chicago Rubyists!
 Today I'm here to talk to you about Number Theory.
-Mostly because I think its an interesting and also really important topic,
-that people who write code for a living mostly don't seem to care of know much about.
+Mostly because I think its an interesting topic and also a really important topic,
+one that people who write code for a living mostly don't seem to care or know much about.
 So before I get into this stuff, I'm curious, does anyone know how this image might be relevant?
 
 ---
@@ -74,6 +74,49 @@ require 'prime'
 
 8191.prime?
 # => true
+5.prime?
+# => true
+6.prime?
+# => false
+```
+
+???
+First, we have 8191.
+Requiring 'prime', which is part of the Ruby standard library, adds the 'prime?' method to the Integer class.
+Using this method we see that 8191 is in fact prime.
+This means that it is only evenly divisible by 1 and itself.
+Another example of a prime number is 5, since it can only be divided by 1 and 5.
+6 is not prime since it can be divided by 2 and 3, in additon to 1 and itself.
+Primes are special. They're the building blocks of all of the natural numbers.
+There's a very important theorem in Number Theory, The Fundamental Theorem of Arithmetic, that establishes primes as these building blocks.
+It states that all integers greater than 1 can be expressed uniquely as a product of primes.
+
+---
+
+```ruby
+require 'prime'
+
+Prime.prime_division(6)
+# => [[2, 1], [3, 1]]
+(2 ** 1) * (3 ** 1)
+# => 6
+
+Prime.prime_division(2940)
+# => [[2, 2], [3, 1], [5, 1], [7, 2]]
+(2 ** 2) * (3 ** 1) * (5 ** 1) * (7 ** 2)
+# => 2940
+```
+
+???
+So the Fundamental Theorem of Arithmetic says we can break down integers into unique products of primes.
+In Ruby, the class method 'prime_division' does this for us.
+It takes an integer, and returns an array of array of integers.
+Each inner array has two integers, and maps to a specific prime, which is the first integer in that array.
+The second number is the number of times you multiply that number, along with the other prime numbers, to get the origional number.
+
+---
+
+```ruby
 Prime.prime_division(8191 + 1)
 # => [[2, 13]]
 (2 ** 13) - 1
@@ -81,14 +124,70 @@ Prime.prime_division(8191 + 1)
 ```
 
 ???
-First we have 8191, which is a prime number. This means that it is only evenly divisible by 1 and itself.
-For example, 5 is prime since it can only be divided by 1 and 5.
-6 is not prime since it can be divided by 2 and 3, in additon to 1 and itself.
-Primes are special. They're the building blocks of all of the other natural numbers.
-There's a very important theorem in Number Theory, The Fundamental Theorem of Arithmetic, that establishes primes as these building blocks.
-It states that all integers greater than 1 can be expressed uniquely as a product of primes.
-In Ruby, this is what the class method, prime_division, on the Prime class does.
-Given an integer great than 1, it gives you the that number's prime factors.
+Back to 8191, in addition to being a prime number, this number has another interesting property.
+When you add 1 to it, and then decompose it into its prime factors, you can see that it has 13 prime factors, and they're all 2.
+So 8191 is a prime number that is 1 less than 2^13, which makes it an even more special kind of prime, called a Mersenne Prime.
+Mersenne Primes are named after the French friar who studied around 400 years ago.
+
+---
+
+# 2<sup>74207281</sup> − 1
+
+300376418084606182052986098359166050056875863030301484843941
+693345547723219067994296893655300772688320448214882399426831
+
+... (22,338,378 digits omitted) ...
+
+717774014762912462113646879425801445107393100212927181629335
+931494239018213879217671164956287190498687010073391086436351
+
+???
+Something else that is interesting about Mersenne Primes is that the 11 largest known prime numbers are Mersenne Primes.
+This one, was discovered in January this year by the Great Internet Mersenne Prime Search,
+which is a public distributed computing project devoted to finding Mersenne Primes.
+
+---
+
+```ruby
+def powers_of_2
+  (0..Float::INFINITY).lazy.map { |n| 2 ** n }
+end
+
+def mersenne_primes
+  powers_of_2.map { |n| n - 1 }.select(&:prime?)
+end
+
+mersenne_primes.first(8)
+# => [3, 7, 31, 127, 8191, 131071, 524287, 2147483647]
+```
+
+???
+Here's how you could find these in Ruby.
+You could take powers of 2, subtract 1 from them, and then keep the ones that are prime.
+Here's the first 8. The 5th one here should look familiar, that's our friend 8191.
+That last one here, 2147483647, was first discovered by the Swiss mathematician Leonhard Euler in 1772.
+
+---
+
+## 2<sup>31</sup> - 1 = 2147483647
+
+![Euler](Euler_10_Swiss_Franc.jpg)
+
+# e<sup>iπ</sup> + 1 = 0
+
+## _"The most remarkable formula in mathematics"_
+
+???
+Here he is on the Swiss 10 Franc bank note.
+He made tons of contributions to different branches of mathematics and physics,
+and he's widely considered to be the most prolific mathematician of all time.
+He's probably best known for Euler's Identity, which is special case of the more generic Euler's Formula.
+It's not really a Number Theory thing, but have people seen this before?
+Yes? You probably studied math or engineering in college?
+Richard Feynman refered to this as the most remarkable formula in mathematics,
+since it relates the important constants 0, 1, e, i and π.
+The constant e was also named after Euler.
+So yeah, Euler was no slouch.
 
 ---
 
