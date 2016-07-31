@@ -14,6 +14,8 @@ Hi fellow Chicago Rubyists!
 Today I'm here to talk to you about Number Theory.
 Mostly because I think its an interesting topic and also a really important topic,
 one that people who write code for a living mostly don't seem to care or know much about.
+This image is from an episode of The Simsons called "The Wizard of Evergreen Terrace".
+In it, Homer begins to admire Thomas Edison and decides to become an inventor.
 So before I get into this stuff, I'm curious, does anyone know how this image might be relevant?
 
 ---
@@ -90,6 +92,7 @@ Another example of a prime number is 5, since it can only be divided by 1 and 5.
 Primes are special. They're the building blocks of all of the natural numbers.
 There's a very important theorem in Number Theory, The Fundamental Theorem of Arithmetic, that establishes primes as these building blocks.
 It states that all integers greater than 1 can be expressed uniquely as a product of primes.
+Another way to think about this is that if mathematics had a Periodic Table, instead of listing the elements it would list prime numbers.
 
 ---
 
@@ -185,9 +188,123 @@ He's probably best known for Euler's Identity, which is special case of the more
 It's not really a Number Theory thing, but have people seen this before?
 Yes? You probably studied math or engineering in college?
 Richard Feynman refered to this as the most remarkable formula in mathematics,
-since it relates the important constants 0, 1, e, i and π.
-The constant e was also named after Euler.
-So yeah, Euler was no slouch.
+since it relates the fundamental constants 0, 1, e, i and π.
+The constant e was also named in Euler's honor.
+Euler was no slouch. Not just anyone can get an important constant like e named after them and also show up on their country's money.
+
+---
+
+# 8208
+
+???
+Option A, 8191 is an interesting number because is interesting beecause its a Mersenne Prime.
+But what about option B? 8208?
+It's definitely not prime since it ends in 8, which is divisible by 2.
+Any thoughts on why else this number might be interesting?
+
+---
+
+```ruby
+class Integer
+  def other_divisors
+    1.upto(self - 1).select { |n| self % n == 0 }
+  end
+end
+
+6.other_divisors
+# => [1, 2, 3]
+8191.other_divisors
+# => [1]
+```
+
+???
+I'm not a big fan of adding methods to core Ruby classes,
+but I won't get too much into that since it could be the topic for another talk.
+However, I feel like for the purposes of demonstrating why 8208 is interesting this is reasonable.
+This function 'other_divisors' I've added to the Integer class, returns an array of all other integers that evenly divide it.
+6, for example, in addition to being divisible by itself, is divisible by 1, 2, and 3.
+On the other hand, 8191, which we're already familiar with, is prime, so the only other number that divides it evenly is 1.
+
+---
+
+```ruby
+6.other_divisors
+# => [1, 2, 3]
+6.other_divisors.reduce(:+)
+# => 6
+```
+
+???
+Look what happens when we add up 6's other divisors. We get 6 back!
+This is yet another kind of number that people have had a name for, for a very long time.
+Can anyone think of another number that does this?
+
+---
+
+```ruby
+def perfect_numbers
+  (1..Float::INFINITY).
+    lazy.
+    select { |n| n.other_divisors.reduce(:+) == n }
+end
+
+perfect_numbers.first(4)
+# => [6, 28, 496, 8128]
+```
+
+???
+These kinds of numbers, whose divisors other than themselves add up to themselves, are called perfect numbers.
+Lets take a look at how we're describing these in Ruby.
+Here we've defined perfect numbers as integers greater than 0, whose other divisors add up to themselves.
+And there we have it, 8128 is interesting because its the 4th perfect number.
+We've already seen the smallest perfect number, 6 since it has 3 other divisors: 1, 2, and 3, which add up to 6.
+28 is the second perfect number with divisors: 1, 2, 4, 7, 14, which add up to 28.
+
+---
+
+Rank | Perfect number      | Mersenne Prime | p(p+1)/2
+-----|---------------------|----------------|-------------
+1    | 6                   | 3              | 3(3+1)/2
+2    | 28                  | 7              | 7(7+1)/2
+3    | 496                 | 31             | 31(31+1)/2
+4    | 8128                | 127            | 127(127+1)/2
+5    | 33550336            | 8191           | 8191(8191+1)/2
+6    | 8589869056          | 131071         | 131071(131071+1)/2
+7    | 137438691328        | 524287         | 524287(524287+1)/2
+8    | 2305843008139952128 | 2147483647     | 2147483647(2147483647+1)/2
+
+???
+But that's not all about perfect numbers!
+Euler also proved a theorem that all even perfect numbers are of the form p(p+1)/2, where p is a Mersenne Prime.
+This means that the nth perfect number can be used to generate the nth Mersenne Prime.
+And this works in the opposite direction too, the nth Mersenne Prime can be used to generate the nth perfect number.
+I've only listed the first 8 perfect numbers and Mersenne Primes here, the start to get really big after this,
+The next perfect number is 37 digits long.
+
+---
+
+# `(2^74207281 − 1)(2^74207281)/2`
+
+## _"Perfect numbers, like perfect men, are very rare."_
+
+### René Descartes
+
+???
+Using the formula for converting a Mersenne Prime into a perfect number from the previous slide,
+and using the largest known Mersenne Prime, that is 2 to the 74,207,281 st power minus 1,
+we can derive the largest known perfect number as such.
+If we were to do the actual computation, the resulting number would be a whopping 44 million digits long.
+I didn't yet mention how many perfect numbers and Mersenne primes are known.
+This pair, which was discovered in January, is the 49th.
+It is conjectured that there are infinitely many perfect numbers and Mersenne Primes, but a formal proof for this is still unknown.
+René Descartes died in 1650, back when there were only 7 known perfect numbers, the largest having 12 digits.
+Today we only know of 49, the largest being this crazy big number, so it's hard to argue with Descates on these perfect numbers being very, very rare.
+
+---
+
+
+8208 is narcissistic number since 8^4 + 2^4 + 0^4 + 8^4 = 8208
+They're called this since the number kind or recreates itself from its own digits, so maybe they're a little self-obsessed or something, so we call them narcissistic
 
 ---
 
