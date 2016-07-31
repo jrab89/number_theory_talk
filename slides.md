@@ -1,22 +1,152 @@
 layout: true
-class: middle
+class: middle, center
 
 ---
 
 # Number Theory: Why Cryptography Works
 
+![The_Wizard_of_Evergreen_Terrace](The_Wizard_of_Evergreen_Terrace.jpg)
+
+_"The Wizard of Evergreen Terrace"_
+
 ???
-Presenter notes go here
-'P' toggles presenter mode
-'C' clones the slideshow in a new tab
+Hi fellow Chicago Rubyists!
+Today I'm here to talk to you about Number Theory.
+Mostly because I think its an interesting and also really important topic,
+that people who write code for a living mostly don't seem to care of know much about.
+So before I get into this stuff, I'm curious, does anyone know how this image might be relevant?
 
 ---
 
 About me...
 
+![Jellyvision](jv_logo.png)
+
+???
+TODO
+
 ---
 
-class: center
+# What is Number Theory?
+
+```ruby
+natural_numbers = 0..Float::INFINITY
+```
+
+???
+A branch of mathematics that deals with the natural numbers,
+the non-negative integers, that's 0 to positive infinity.
+So 0 to positive infinity? That's still a lot of numbers and doesn't really narrow down what we're talking about.
+
+---
+
+![Marge_and_Homer_Turn_a_Couple_Play](Marge_and_Homer_Turn_a_Couple_Play.jpg)
+
+_“Marge and Homer Turn a Couple Play”_
+
+???
+Why do I keep showing you images from The Simpsons? Turns out, I like The Simpsons, and The Simpsons is made by some people who really like math!
+One of the writers, David X. Cohen, studied Physics at Harvard and went on to get a masters degree in Computer Science fom Berkeley.
+And when you're not looking, they also do a good job of sneaking in little bits of mathematics into different episodes.
+Here's another image from an episode of The Simpsons called "Marge and Homer Turn a Couple Play".
+In it, a baseball player is having relationship problems and he turns to Marge and Homer for help.
+In this scene they're at a baseball game, and the jumbotron is asking people to guess the number of attendees at the game.
+I'm pretty sure I've been to Sox or Cubs games where they do this.
+
+---
+
+# Lets take a closer look...
+
+## A) 8191
+## B) 8128
+## C) 8208
+
+???
+Is there anything interesting about these numbers?
+They seem reasonable for the number of people at a baseball game.
+And they're all within about 100 of eachother.
+It turns out people who study Number Theory really get a kick out of the numbers on the jumbotron here.
+
+---
+
+```ruby
+require 'prime'
+
+8191.prime?
+# => true
+Prime.prime_division(8191 + 1)
+# => [[2, 13]]
+(2 ** 13) - 1
+# => 8191
+```
+
+???
+First we have 8191, which is a prime number. This means that it is only evenly divisible by 1 and itself.
+For example, 5 is prime since it can only be divided by 1 and 5.
+6 is not prime since it can be divided by 2 and 3, in additon to 1 and itself.
+Primes are special. They're the building blocks of all of the other natural numbers.
+There's a very important theorem in Number Theory, The Fundamental Theorem of Arithmetic, that establishes primes as these building blocks.
+It states that all integers greater than 1 can be expressed uniquely as a product of primes.
+In Ruby, this is what the class method, prime_division, on the Prime class does.
+Given an integer great than 1, it gives you the that number's prime factors.
+
+---
+
+```ruby
+require 'prime'
+
+primes = (0..Float::INFINITY).select(&:prime?)
+```
+
+???
+Primes are neat! But how many are there? Maybe you can just count them all? Computers are fast, right?
+This is not going to do you much good, unless you need your computer to get hot, maybe to warm up your coffee?
+
+---
+
+background-image: url(Euclid.jpg)
+
+???
+It turns out there are infinitely many primes!
+Over 2000 years ago, this was proven by this Greek guy, Euclid.
+He's often refered to as "the father of geometry",
+so you can thank him for all of the stuff you learned about triangles and parallel lines from when you were in high school.
+This proof is one of the big proofs in mathematics, and many mathematicians consider it to be very elegant and beautiful.
+
+---
+
+TODO: infinite primes proof
+https://www.youtube.com/watch?v=ctC33JAV4FI
+https://en.wikipedia.org/wiki/Euclid%27s_theorem
+
+---
+
+background-image: url(Plimpton_322.jpg)
+
+???
+How long has have people been concerned with Number Theory?
+
+---
+
+### _"Mathematics is the queen of the sciences and number theory is the queen of mathematics"_
+
+### Carl Friedrich Gauss
+
+![Gauss](gauss.jpg)
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
 
 # But first...
 
@@ -76,7 +206,7 @@ That being said a great way to learn about Number Theory and Cryptography (or re
 
 What is a proof?
 
-You might think of a proof from a math class you had, but proofs exist outside mathematics.
+You might think of a proof from a math class you had, but proofs exist outside math
 
 So what's a higher level notion of what a proof is?
 
@@ -102,16 +232,13 @@ Across many fields, a proof is a method for ascertaining truth:
     * Tabs vs spaces
     * Ruby vs Python (that other language with the snake)
     * "My code doesn't have any bugs!"
-  - "I don't see why not"
-    * Particularly effective, since it tranfers the burden of proof to anyone who disagrees with you
-    * Now your view is correct until someone else disproves you
+* "I don't see why not!"
+  - Particularly effective, since it tranfers the burden of proof to anyone who disagrees with you
+  - Now your view is correct until someone else disproves you
 * Mathematic Proof: a verification of a proposition by a chain of logical deductions from a set of axioms
   - Proposition: a statement that is true of false
     * e.g. 2 + 3 = 5
-    * ∀n ∈ ℕ, n^2 + n + 41 is a prime number
-      - ∀ => "For all"
-      - ∈ => "is a member of"
-      - ℕ => the natural numbers (non-negative integers)
+    * For every non-negative integer, n, the value of n^2 + n + 41 is a prime number
       - prime number => an integer divisible only by itself and 1
       - predicate => "n^2 + n + 41 is a prime number" in this case, a proposition whose truth depends on some variable(s), n in this case
         * Like a method that returns a boolean in Ruby, e.g.
@@ -130,13 +257,13 @@ Across many fields, a proof is a method for ascertaining truth:
           ```
         * Maybe we can approach this the way physicists do? Lets try a bunch of values for n and see if the results are prime:
           ```
-          (1..20).map { |n| n_squared_plus_n_plus_41_prime?(n) }.all?
+          (0..39).map { |n| n_squared_plus_n_plus_41_prime?(n) }.all?
           # => true
           ```
-        * At this point can we say the proposition is true? Lets keep trying:
+        * For the first 40 values of n, the proposition holds! Looking good!
+        * In a lot of fields this might hold some weight, in medecine for example if a treatment worked for 40 out of 40 patients maybe it will work for all patients?
+        * However if we keep trying more values for n:
           ```
-          (21..39).map { |n| n_squared_plus_n_plus_41_prime?(n) }.all?
-          # => true
           n_squared_plus_n_plus_41_prime?(40)
           # => false
           40 ** 2 + 40 + 41 == 41 * 41
@@ -145,3 +272,28 @@ Across many fields, a proof is a method for ascertaining truth:
         * Not as rare or contrived an example as you'd guess
         * Many propositions that seem to be true when you check a few cases (or _a lot_ of cases), but which turn out to be false
         * You can’t check a claim about an infinite set by checking a finite set of its elements, no matter how large the finite set!
+        * It turns out propositions that involve all of the natural numbers are really common, so mathematicians use some notation to make things more concise:
+          - ∀n ∈ ℕ, n^2 + n + 41 is prime
+          - ∀ => "For all"
+          - ∈ => "is a member of"
+          - ℕ => the natural numbers (non-negative integers)
+    * Proposition 1.3.2 (https://youtu.be/L3LMbpZIKhQ?t=14m20s)
+    * https://en.wikipedia.org/wiki/Mersenne_conjectures
+    * ∀x,y,z ∈ ℤ⁺, 313 * (x^3 + y^3) ≠ z^3
+      - For all positive integer values of x, y, and z, 313 * (x^3 + y^3) = z^3 has no solutions
+      - Lets try to find a counterexample in Ruby:
+        ```
+        NATURAL_NUMBERS = 0..Float::INFINITY
+
+        def f(x, y)
+          313 * (x ** 3 + y ** 3)
+        end
+
+        NATURAL_NUMBERS.first(100_000).each do |x|
+          NATURAL_NUMBERS.first(100_000).each do |y|
+            NATURAL_NUMBERS.first(100_000).each do |z|
+              puts "#{x}, #{y}, #{z}" if f(x, y) == z ** 3
+            end
+          end
+        end
+        ```
