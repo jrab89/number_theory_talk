@@ -12,15 +12,16 @@ _"The Wizard of Evergreen Terrace"_
 ???
 Hi fellow Chicago Rubyists!
 Today I'm here to talk to you about Number Theory.
-Mostly because I think its an interesting topic and also a really important topic,
-one that people who write code for a living mostly don't seem to care or know much about.
+It's an interesting topic and also a really important topic,
+and one that people who write code for a living mostly don't seem to care or know much about,
+which is unfortunate.
 This image is from an episode of The Simsons called "The Wizard of Evergreen Terrace".
 In it, Homer begins to admire Thomas Edison and decides to become an inventor.
 So before I get into this stuff, I'm curious, does anyone know how this image might be relevant?
 
 ---
 
-About me...
+# About me...
 
 ![Jellyvision](jv_logo.png)
 
@@ -36,8 +37,8 @@ natural_numbers = 0..Float::INFINITY
 ```
 
 ???
-A branch of mathematics that deals with the natural numbers,
-the non-negative integers, that's 0 to positive infinity.
+Number Theory is a branch of mathematics that deals with the natural numbers.
+The natural numbers are the non-negative integers, so they include 0 to positive infinity.
 So 0 to positive infinity? That's still a lot of numbers and doesn't really narrow down what we're talking about.
 
 ---
@@ -47,13 +48,14 @@ So 0 to positive infinity? That's still a lot of numbers and doesn't really narr
 _“Marge and Homer Turn a Couple Play”_
 
 ???
-Why do I keep showing you images from The Simpsons? Turns out, I like The Simpsons, and The Simpsons is made by some people who really like math!
+To help me show you what Number Theory is about, here's another image from The Simpsons.
+Why do I keep showing you images from The Simpsons? It turns out, I like The Simpsons, and The Simpsons is made by some people who really like math!
 One of the writers, David X. Cohen, studied Physics at Harvard and went on to get a masters degree in Computer Science fom Berkeley.
-And when you're not looking, they also do a good job of sneaking in little bits of mathematics into different episodes.
-Here's another image from an episode of The Simpsons called "Marge and Homer Turn a Couple Play".
+And when you're not looking, the writers on The Simpsons do a good job of sneaking in little bits of mathematics into different episodes.
+This episode of The Simpsons is called "Marge and Homer Turn a Couple Play".
 In it, a baseball player is having relationship problems and he turns to Marge and Homer for help.
-In this scene they're at a baseball game, and the jumbotron is asking people to guess the number of attendees at the game.
-I'm pretty sure I've been to Sox or Cubs games where they do this.
+In this particular scene they're at a baseball game,
+and the jumbotron is asking people to guess the number of attendees at the game.
 
 ---
 
@@ -64,10 +66,11 @@ I'm pretty sure I've been to Sox or Cubs games where they do this.
 ## C) 8208
 
 ???
-Is there anything interesting about these numbers?
+The choices for the size of the crowd at the game are 8191, 8128, and 8208.
+Is there anything interesting going on with these numbers?
 They seem reasonable for the number of people at a baseball game.
 And they're all within about 100 of eachother.
-It turns out people who study Number Theory really get a kick out of the numbers on the jumbotron here.
+They seem innocuous, but people who study Number Theory really get a kick out of the choices here.
 
 ---
 
@@ -194,11 +197,13 @@ Euler was no slouch. Not just anyone can get an important constant like e named 
 
 ---
 
-# 8208
+# A) 8191
+# B) 8128
+# C) 8208
 
 ???
 Option A, 8191 is an interesting number because is interesting beecause its a Mersenne Prime.
-But what about option B? 8208?
+But what about option B? 8128?
 It's definitely not prime since it ends in 8, which is divisible by 2.
 Any thoughts on why else this number might be interesting?
 
@@ -220,7 +225,7 @@ end
 ???
 I'm not a big fan of adding methods to core Ruby classes,
 but I won't get too much into that since it could be the topic for another talk.
-However, I feel like for the purposes of demonstrating why 8208 is interesting this is reasonable.
+However, I feel like for the purposes of demonstrating why 8128 is interesting this is reasonable.
 This function 'other_divisors' I've added to the Integer class, returns an array of all other integers that evenly divide it.
 6, for example, in addition to being divisible by itself, is divisible by 1, 2, and 3.
 On the other hand, 8191, which we're already familiar with, is prime, so the only other number that divides it evenly is 1.
@@ -349,6 +354,7 @@ How long has have people been concerned with Number Theory?
 ### Carl Friedrich Gauss
 
 ![Gauss](gauss.jpg)
+
 
 
 
