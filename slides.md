@@ -13,11 +13,11 @@ _"The Wizard of Evergreen Terrace"_
 Hi fellow Chicago Rubyists!
 Today I'm here to talk to you about Number Theory.
 It's an interesting topic and also a really important topic,
-and one that people who write code for a living mostly don't seem to care or know much about,
-which is unfortunate.
+and one that people who write Ruby mostly don't seem to deal with much, which is unfortunate.
 This image is from an episode of The Simsons called "The Wizard of Evergreen Terrace".
 In it, Homer begins to admire Thomas Edison and decides to become an inventor.
-So before I get into this stuff, I'm curious, does anyone know how this image might be relevant?
+The second line is a reference to something very important in Number Theory called Fermat's Last Theorem,
+which also comes up in Star Trek and Doctor Who.
 
 ---
 
@@ -37,9 +37,11 @@ natural_numbers = 0..Float::INFINITY
 ```
 
 ???
+So what is Number Theory exactly?
 Number Theory is a branch of mathematics that deals with the natural numbers.
-The natural numbers are the non-negative integers, so they include 0 to positive infinity.
-So 0 to positive infinity? That's still a lot of numbers and doesn't really narrow down what we're talking about.
+The natural numbers are the non-negative integers, so they span from 0 to positive infinity.
+In Ruby we can describe the natural numbers using a range, from 0 to the infinity constant in the Float class.
+So 0 to positive infinity? That's still a lot of numbers, and this doesn't really narrow down what Number Theory is about.
 
 ---
 
@@ -49,11 +51,11 @@ _“Marge and Homer Turn a Couple Play”_
 
 ???
 To help me show you what Number Theory is about, here's another image from The Simpsons.
-Why do I keep showing you images from The Simpsons? It turns out, I like The Simpsons, and The Simpsons is made by some people who really like math!
-One of the writers, David X. Cohen, studied Physics at Harvard and went on to get a masters degree in Computer Science fom Berkeley.
+Why do I keep showing you images from The Simpsons? It turns out, I like The Simpsons, and also, The Simpsons is made by some people who really like math!
+One of the writers, David X. Cohen, studied Physics at Harvard and then went on to get a masters degree in Computer Science fom Berkeley.
 And when you're not looking, the writers on The Simpsons do a good job of sneaking in little bits of mathematics into different episodes.
 This episode of The Simpsons is called "Marge and Homer Turn a Couple Play".
-In it, a baseball player is having relationship problems and he turns to Marge and Homer for help.
+In this episode, a baseball player is having relationship problems and he turns to Marge and Homer for help.
 In this particular scene they're at a baseball game,
 and the jumbotron is asking people to guess the number of attendees at the game.
 
@@ -66,11 +68,12 @@ and the jumbotron is asking people to guess the number of attendees at the game.
 ## C) 8208
 
 ???
-The choices for the size of the crowd at the game are 8191, 8128, and 8208.
-Is there anything interesting going on with these numbers?
+Let's take a closer look at the choices we have for the size of the crowd,
+they are 8191, 8128, and 8208.
+Is there anything unusual about these numbers?
 They seem reasonable for the number of people at a baseball game.
-And they're all within about 100 of eachother.
-They seem innocuous, but people who study Number Theory really get a kick out of the choices here.
+They're all close to 8000, and they're all within about 100 of eachother.
+However, these seemingly innocuous numbers are the kind of numbers that people who study Number Theory find very interesting.
 
 ---
 
@@ -87,15 +90,33 @@ require 'prime'
 
 ???
 First, we have 8191.
-Requiring 'prime', which is part of the Ruby standard library, adds the 'prime?' method to the Integer class.
+In this snippet of Ruby code, we're first requiring 'prime',
+which is part of the Ruby standard library.
+This adds the 'prime?' method to the Integer class.
 Using this method we see that 8191 is in fact prime.
 This means that it is only evenly divisible by 1 and itself.
 Another example of a prime number is 5, since it can only be divided by 1 and 5.
-6 is not prime since it can be divided by 2 and 3, in additon to 1 and itself.
+6, on the other hand, is not prime since it can be divided by 2 and 3, in additon to 1 and itself.
+
+---
+
+# Fundamental Theorem of Arithmetic (FTA)
+
+### Every integer greater than 1 either is prime itself or is the product of prime numbers, and this product is unique.
+
+`60 = 5 * 3 * 2 * 2`
+
+???
 Primes are special. They're the building blocks of all of the natural numbers.
-There's a very important theorem in Number Theory, The Fundamental Theorem of Arithmetic, that establishes primes as these building blocks.
+There's a very important theorem in Number Theory, its called The Fundamental Theorem of Arithmetic.
+It establishes primes as these building blocks.
 It states that all integers greater than 1 can be expressed uniquely as a product of primes.
 Another way to think about this is that if mathematics had a Periodic Table, instead of listing the elements it would list prime numbers.
+Integers are like a chemical compounds, which are unique combinations of atoms, which are like primes.
+For example, the only way to express 60 as a product of primes is 5 * 3 * 2 * 2.
+Every other integer greater than 2 has one, and only one, unique prime factorization.
+This theorem is one of the main reasons we don't consider 1 to be a prime number.
+If 1 were prime, prime factorizations wouldn't be unique since you can always multiply a number by 1 and end up with that same number.
 
 ---
 
@@ -107,6 +128,11 @@ Prime.prime_division(6)
 (2 ** 1) * (3 ** 1)
 # => 6
 
+Prime.prime_division(5)
+# => [[5, 1]]
+5 ** 1
+# => 5
+
 Prime.prime_division(2940)
 # => [[2, 2], [3, 1], [5, 1], [7, 2]]
 (2 ** 2) * (3 ** 1) * (5 ** 1) * (7 ** 2)
@@ -116,9 +142,11 @@ Prime.prime_division(2940)
 ???
 So the Fundamental Theorem of Arithmetic says we can break down integers into unique products of primes.
 In Ruby, the class method 'prime_division' does this for us.
-It takes an integer, and returns an array of array of integers.
+It takes an integer, and returns an array of arrays of integers.
 Each inner array has two integers, and maps to a specific prime, which is the first integer in that array.
 The second number is the number of times you multiply that number, along with the other prime numbers, to get the origional number.
+For example, 6's prime division gives us back 2 sub-arrays, the first containing 2 and 1, the second containing 3 and 1.
+This means that if we want to get 6 back from this decomposition, we multiply 2^1 times 3^1.
 
 ---
 
@@ -131,9 +159,11 @@ Prime.prime_division(8191 + 1)
 
 ???
 Back to 8191, in addition to being a prime number, this number has another interesting property.
-When you add 1 to it, and then decompose it into its prime factors, you can see that it has 13 prime factors, and they're all 2.
-So 8191 is a prime number that is 1 less than 2^13, which makes it an even more special kind of prime, called a Mersenne Prime.
-Mersenne Primes are named after the French friar who studied around 400 years ago.
+When you add 1 to it, and then you decompose it into its prime factors, you end up with 13 2's.
+So 8191 is a prime number that is 1 less than 2^13, which makes it an even more special kind of prime.
+Mathematicians have a name for these, they're called Mersenne Primes.
+Mersenne Primes are named after Marin Mersenne.
+Mersenne was a French theologian and mathematician who studied these kinds of numbers around 400 years ago.
 
 ---
 
@@ -148,9 +178,12 @@ Mersenne Primes are named after the French friar who studied around 400 years ag
 931494239018213879217671164956287190498687010073391086436351
 
 ???
-Something else that is interesting about Mersenne Primes is that the 11 largest known prime numbers are Mersenne Primes.
-This one, was discovered in January this year by the Great Internet Mersenne Prime Search,
-which is a public distributed computing project devoted to finding Mersenne Primes.
+Another cool thing about Mersenne Primes is that the 11 largest known prime numbers are all Mersenne Primes,
+they can all be written in the form of 2 to some power minus 1.
+This huge number, and I'm not going to even try to pronounce any of its over 22 million digits,
+was discovered in January this year by the Great Internet Mersenne Prime Search.
+It is the largest known prime number.
+The Great Internet Mersenne Prime Search is a public distributed computing project devoted to finding Mersenne Primes.
 
 ---
 
@@ -171,7 +204,7 @@ mersenne_primes.first(8)
 Here's how you could find these in Ruby.
 You could take powers of 2, subtract 1 from them, and then keep the ones that are prime.
 Here's the first 8. The 5th one here should look familiar, that's our friend 8191.
-That last one here, 2147483647, was first discovered by the Swiss mathematician Leonhard Euler in 1772.
+That last one here, 2,147,483,647, was first discovered by the Swiss mathematician Leonhard Euler in 1772.
 
 ---
 
@@ -185,15 +218,17 @@ That last one here, 2147483647, was first discovered by the Swiss mathematician 
 
 ???
 Here he is on the Swiss 10 Franc bank note.
-He made tons of contributions to different branches of mathematics and physics,
-and he's widely considered to be the most prolific mathematician of all time.
-He's probably best known for Euler's Identity, which is special case of the more generic Euler's Formula.
+He made tons of contributions to different branches of mathematics and physics.
+He's widely considered to be the most prolific mathematician of all time.
+He's probably best known for Euler's Identity, named after him, which is special case of the more generic Euler's Formula.
 It's not really a Number Theory thing, but have people seen this before?
 Yes? You probably studied math or engineering in college?
-Richard Feynman refered to this as the most remarkable formula in mathematics,
-since it relates the fundamental constants 0, 1, e, i and π.
+Richard Feynman refered to this as the most remarkable formula in mathematics.
+The reason it's so cool is that it relates the fundamental constants 0, 1, e, i and π,
+and it does this in such a short and simple equation.
 The constant e was also named in Euler's honor.
-Euler was no slouch. Not just anyone can get an important constant like e named after them and also show up on their country's money.
+Not just anyone can get an important constant like e named after them and also show up on their country's money.
+The guy knew what he was doing.
 
 ---
 
@@ -202,7 +237,7 @@ Euler was no slouch. Not just anyone can get an important constant like e named 
 # C) 8208
 
 ???
-Option A, 8191 is an interesting number because is interesting beecause its a Mersenne Prime.
+Option A, 8191 is an interesting number beecause it's a Mersenne Prime.
 But what about option B? 8128?
 It's definitely not prime since it ends in 8, which is divisible by 2.
 Any thoughts on why else this number might be interesting?
@@ -224,9 +259,11 @@ end
 
 ???
 I'm not a big fan of adding methods to core Ruby classes,
-but I won't get too much into that since it could be the topic for another talk.
-However, I feel like for the purposes of demonstrating why 8128 is interesting this is reasonable.
-This function 'other_divisors' I've added to the Integer class, returns an array of all other integers that evenly divide it.
+but I won't get too much into that, since it could be the topic for another talk.
+However, I feel like it's appropriate for the purpose of demonstrating why 8128 is interesting.
+This method 'other_divisors' that I've added to the Integer class,
+just returns an array of all other integers that evenly divide it.
+It's just iterating over 1 through 1 less than itself and checking whether those divide it evenly.
 6, for example, in addition to being divisible by itself, is divisible by 1, 2, and 3.
 On the other hand, 8191, which we're already familiar with, is prime, so the only other number that divides it evenly is 1.
 
@@ -241,8 +278,9 @@ On the other hand, 8191, which we're already familiar with, is prime, so the onl
 
 ???
 Look what happens when we add up 6's other divisors. We get 6 back!
-This is yet another kind of number that people have had a name for, for a very long time.
-Can anyone think of another number that does this?
+This is yet another kind of number that mathematicians have had a name for, for a very long time.
+Can anyone think of the next number that has this property?
+Something where we can take all of its other divisors and add them up, and then get back that same number?
 
 ---
 
@@ -258,12 +296,13 @@ perfect_numbers.first(4)
 ```
 
 ???
-These kinds of numbers, whose divisors other than themselves add up to themselves, are called perfect numbers.
+These kinds of numbers, whose divisors other than themselves, that add up to themselves, are called perfect numbers.
 Lets take a look at how we're describing these in Ruby.
 Here we've defined perfect numbers as integers greater than 0, whose other divisors add up to themselves.
 And there we have it, 8128 is interesting because its the 4th perfect number.
 We've already seen the smallest perfect number, 6 since it has 3 other divisors: 1, 2, and 3, which add up to 6.
-28 is the second perfect number with divisors: 1, 2, 4, 7, 14, which add up to 28.
+28 is the second perfect number.
+Its divisors are 1, 2, 4, 7, 14, which add up to 28.
 
 ---
 
@@ -280,10 +319,12 @@ Rank | Perfect number      | Mersenne Prime | p(p+1)/2
 
 ???
 But that's not all about perfect numbers!
-Euler also proved a theorem that all even perfect numbers are of the form p(p+1)/2, where p is a Mersenne Prime.
+Euler, in additon to doing the other cool stuff I told you about,
+also proved a theorem that all even perfect numbers are of the form p(p+1)/2, where p is a Mersenne Prime.
 This means that the nth perfect number can be used to generate the nth Mersenne Prime.
 And this works in the opposite direction too, the nth Mersenne Prime can be used to generate the nth perfect number.
-I've only listed the first 8 perfect numbers and Mersenne Primes here, the start to get really big after this,
+This table contains the first 8 pairs of perfect numbers and Mersenne Primes, and also how to transform one into the other.
+I've only listed the first 8 pairs here, since they start to get really big after this.
 The next perfect number is 37 digits long.
 
 ---
@@ -295,15 +336,18 @@ The next perfect number is 37 digits long.
 ### René Descartes
 
 ???
-Using the formula for converting a Mersenne Prime into a perfect number from the previous slide,
+Using the formula for converting a Mersenne Prime into a perfect number, from the previous slide,
 and using the largest known Mersenne Prime, that is 2 to the 74,207,281 st power minus 1,
-we can derive the largest known perfect number as such.
+we can compute the largest known perfect number as such.
 If we were to do the actual computation, the resulting number would be a whopping 44 million digits long.
-I didn't yet mention how many perfect numbers and Mersenne primes are known.
-This pair, which was discovered in January, is the 49th.
+I didn't yet mention how many perfect numbers and Mersenne primes there are.
+This pair, which was discovered in January, is the 49th that we know of.
 It is conjectured that there are infinitely many perfect numbers and Mersenne Primes, but a formal proof for this is still unknown.
-René Descartes died in 1650, back when there were only 7 known perfect numbers, the largest having 12 digits.
-Today we only know of 49, the largest being this crazy big number, so it's hard to argue with Descates on these perfect numbers being very, very rare.
+So if you can prove that there are infinitely many of these, you can be a big-shot mathematician just like Euler!
+René Descartes, the Frech philospher and mathematician, died in 1650.
+Back then, there were only 7 known perfect numbers, the largest having 12 digits.
+Today we know of 49, 7 times the amount Descartes would've known of.
+The largest is this crazy big number, so it's hard to argue with Descates on these perfect numbers being very, very rare.
 
 ---
 
@@ -519,3 +563,4 @@ Across many fields, a proof is a method for ascertaining truth:
           end
         end
         ```
+
