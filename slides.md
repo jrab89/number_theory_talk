@@ -519,7 +519,16 @@ decipher.update(cipher_text) + decipher.final
 ```
 
 ???
-TODO
+On the other end, decryption works similarly.
+We instantiate another AES object, with the same number of bits for the key, and also the same cipher mode.
+This time though, we call 'decrypt' on it, so that we can convert cipher text to plain text.
+We set the key and initialization vector, and then we're then ready to decrypt.
+Appending the output of 'final' to the output of 'update' results in the message we started with.
+This works pretty well when both parties have a shared key.
+But in most cases, this isn't practical.
+You can't just meet face to face with an Amazon employee to decide on a key to use for all of your communications.
+And even if you could, sites like Amazon.com would need to keep track of a key for every single one of their customers.
+We need something different, and Number Theory can help.
 
 ---
 
