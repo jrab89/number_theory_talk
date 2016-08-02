@@ -355,9 +355,70 @@ The largest is this crazy big number, so it's hard to argue with Descates on the
 
 ---
 
+# A) 8191
+# B) 8128
+# C) 8208
 
-8208 is narcissistic number since 8^4 + 2^4 + 0^4 + 8^4 = 8208
-They're called this since the number kind or recreates itself from its own digits, so maybe they're a little self-obsessed or something, so we call them narcissistic
+???
+Option B, we know that one is important because its a perfect number.
+How about option C?
+This one, 8208, is special because it's a narcissistic number.
+
+---
+
+```ruby
+class Integer
+  def narcissistic?
+    digits = to_s.chars.map(&:to_i)
+    digits.map { |d| d ** digits.length }.
+      reduce(:+) == self
+  end
+end
+
+(1 ** 2) + (2 ** 2)
+# => 5
+(8 ** 4) + (2 ** 4) + (0 ** 4) + (8 ** 4)
+# => 8208
+
+12.narcissistic?
+# => false
+8208.narcissistic?
+# => true
+```
+
+???
+8208 is a narcissistic number since 8^4 + 2^4 + 0^4 + 8^4 = 8208.
+They're called narcissistic since the number kind or recreates itself from its own digits,
+so maybe they're a little self-obsessed or something.
+Here's how you could represent narcissistic numbers is Ruby.
+This is not the most elegent code, so let me explain what's going on here.
+For the integer we're calling the 'narcissistic?' method on,
+we're first converting it to an array of its digits.
+Then we're taking the sum of each of those digits raised to the power of the total number of digits.
+And finally we check to see if that sum is equal to the origional integer.
+Unlike Mersenne primes or perfect numbers, whether or not a number is narcissistic depends on the base its written in.
+For example, the only narcissistic base 3 numbers are: 0, 1, 2, 5, 8, and 17.
+
+---
+
+# That's nice but...
+
+## Netflix costs $7.99
+## 1.60934 km = 1 mi
+## π = 3.14159...
+
+???
+So those 3 numbers were fun to think about, and clearly there are a lot of patterns witin the natural numbers,
+but what good is this to anybody? The real world is much messier than the world of the natural numbers.
+The real world is continuous, not discrete.
+We care about things with values that are between integers: stuff like money, distance, fractions, or important values like π.
+And 100 years or so ago you would've been right, Number Theory didn't have many applications.
+
+---
+
+### _"Virtually every theorem in elementary number theory arises in a natural, motivated way in connection with the problem of making computers do high-speed numerical calculations"_
+
+#### Donald Knuth
 
 ---
 
