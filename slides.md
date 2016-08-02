@@ -412,13 +412,124 @@ So those 3 numbers were fun to think about, and clearly there are a lot of patte
 but what good is this to anybody? The real world is much messier than the world of the natural numbers.
 The real world is continuous, not discrete.
 We care about things with values that are between integers: stuff like money, distance, fractions, or important values like π.
+So maybe you'd think Number Theory isn't very useful.
 And 100 years or so ago you would've been right, Number Theory didn't have many applications.
+However, this changed entirely with computing.
 
 ---
 
 ### _"Virtually every theorem in elementary number theory arises in a natural, motivated way in connection with the problem of making computers do high-speed numerical calculations"_
 
 #### Donald Knuth
+
+???
+Computers represent everything with discrete bits.
+Even numbers like π can be approximated with floating-point represenations.
+And if you don't believe me that Number Theory is useful, here's a quote from someone much smarter than me, Donald Knuth.
+Some areas in computing where Number Theory is very important are:
+hash functions, pseudorandom numbers generation, doing fast arithmetic operations,
+and also cryptography.
+We all use these things on a daily basis, and probably most of the time we don't even realize it.
+
+---
+
+# Symmetric key encryption
+
+![symmetric_key_encryption](Symmetric_key.svg)
+
+???
+Cryptography is about constructing and analyzing systems that prevent third parties from reading private messages.
+For example, say I want to buy something on Amazon.com.
+They need my credit card number, and I'd like to be able to send them that,
+with confidence that only they will be able to read it.
+I'm going to be sending Amazon my credit card number over the internet,
+and the internet is big, complicated, and full of eavesdroppers.
+How can we beat the eavesdroppers?
+One way to do this, is if I and Amazon.com have a shared secret key, like a password, that no one else knows.
+I can use this key to encrypt my credit card number,
+I send this encrypted text, called the cipher text, over the internet to Amazon.com.
+If anyone else sees my encrypted card number, to them, it will look like nonsense.
+Amazon.com however, since they have the same key I have,
+they're able to take the nonsense I send them, and turn it back into my credit card number.
+
+---
+
+# Encrypt
+
+```ruby
+require 'openssl'
+require 'digest'
+
+plain_text = 'Very, very secret message'
+key = Digest::SHA256.digest 'password'
+iv = Digest::SHA256.digest 'initialization vector'
+
+cipher = OpenSSL::Cipher::AES.new(256, :CBC)
+cipher.encrypt
+cipher.key = key
+cipher.iv = iv
+
+cipher_text = cipher.update(plain_text) + cipher.final
+# => "\x1Ea\xB0\x8DXC\xE8\x94\x19DR\xF3\xC1\xCF$\xC6\x92}\xAAg\xA6~\x9B\x15\xB2\xCA\xA7sbDe:"
+```
+
+???
+TODO
+
+
+---
+
+# Decrypt
+
+```ruby
+decipher = OpenSSL::Cipher::AES.new(256, :CBC)
+decipher.decrypt
+decipher.key = key
+decipher.iv = iv
+
+decipher.update(cipher_text) + decipher.final
+# => "Very, very secret message"
+```
+
+???
+TODO
+
+---
+
+# Public key encryption
+
+![Public_key_encryption.svg](Public_key.svg)
+
+???
+TODO
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ---
 
@@ -463,19 +574,6 @@ How long has have people been concerned with Number Theory?
 ### Carl Friedrich Gauss
 
 ![Gauss](gauss.jpg)
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ---
 
@@ -532,99 +630,3 @@ Before we get into Number Theory, I'd like to talk about Larry Wall a bit. For t
 I think these are some really valuably insights that can lead us to better solve problems, and also solve the better problems. I also think they make for three really good reasons that you probably shouldn't be writing your own cyptographic code, especially when it would be really bad if it didn't exactly work as you had intended.
 
 That being said a great way to learn about Number Theory and Cryptography (or really anything) is do it yourself! And yeah maybe even use it on your blog or your iPhone app your working on that lets people share where with eachother where all the best Pokemons are at! But probably don't use your own cryptosystem if your trying to do things like protect people's medical or financial data.
-
----
-
-What is a proof?
-
-You might think of a proof from a math class you had, but proofs exist outside math
-
-So what's a higher level notion of what a proof is?
-
-Across many fields, a proof is a method for ascertaining truth:
-
-* Observation and experimentation
-  - What makes physics work
-  - If we do an experiment 10 times, and every time it comes out the same way, we've ascertained some truth
-  - Who really knows if there is gravity? We observe it, and then that's the truth: there is gravity
-    * We see how it behaves under different cicrumstances, then we make generalizations
-    * We verify those generalizations through experimentation, then those become laws
-* Truth is established by juries and judges
-  - Someone has alledgedly done a bad thing, witnesses say they saw this person do that, a jury finds this to be compelling evidence, then a verdict is made
-  - Not always 100% effective, but like the other methods of proof, it is a method for ascertaining the truth
-  - Marge in chains, Bart Gets Hit By a Car
-* Sometimes truth comes from authority
-  - Truth can get complicated when you have conflicting truths: someone thinks one thing, someone else thinks another
-  - Some places I've worked I had superiors that when they said something that was the truth, and you better be okay with that or "you're fired"
-  - Teachers or professors, how you did on assignment or test is up to them
-* Inner Conviction
-  - Popular in computing
-    * Emacs vs Vim
-    * Tabs vs spaces
-    * Ruby vs Python (that other language with the snake)
-    * "My code doesn't have any bugs!"
-* "I don't see why not!"
-  - Particularly effective, since it tranfers the burden of proof to anyone who disagrees with you
-  - Now your view is correct until someone else disproves you
-* Mathematic Proof: a verification of a proposition by a chain of logical deductions from a set of axioms
-  - Proposition: a statement that is true of false
-    * e.g. 2 + 3 = 5
-    * For every non-negative integer, n, the value of n^2 + n + 41 is a prime number
-      - prime number => an integer divisible only by itself and 1
-      - predicate => "n^2 + n + 41 is a prime number" in this case, a proposition whose truth depends on some variable(s), n in this case
-        * Like a method that returns a boolean in Ruby, e.g.
-          ```ruby
-          def even?(n)
-            n % 2 == 0
-          end
-          ```
-        * This particular predicate can be written as:
-          ```ruby
-          require 'prime'
-
-          def n_squared_plus_n_plus_41_prime?(n)
-            Prime.prime?(n ** 2 + n + 41)
-          end
-          ```
-        * Maybe we can approach this the way physicists do? Lets try a bunch of values for n and see if the results are prime:
-          ```
-          (0..39).map { |n| n_squared_plus_n_plus_41_prime?(n) }.all?
-          # => true
-          ```
-        * For the first 40 values of n, the proposition holds! Looking good!
-        * In a lot of fields this might hold some weight, in medecine for example if a treatment worked for 40 out of 40 patients maybe it will work for all patients?
-        * However if we keep trying more values for n:
-          ```
-          n_squared_plus_n_plus_41_prime?(40)
-          # => false
-          40 ** 2 + 40 + 41 == 41 * 41
-          # => true
-          ```
-        * Not as rare or contrived an example as you'd guess
-        * Many propositions that seem to be true when you check a few cases (or _a lot_ of cases), but which turn out to be false
-        * You can’t check a claim about an infinite set by checking a finite set of its elements, no matter how large the finite set!
-        * It turns out propositions that involve all of the natural numbers are really common, so mathematicians use some notation to make things more concise:
-          - ∀n ∈ ℕ, n^2 + n + 41 is prime
-          - ∀ => "For all"
-          - ∈ => "is a member of"
-          - ℕ => the natural numbers (non-negative integers)
-    * Proposition 1.3.2 (https://youtu.be/L3LMbpZIKhQ?t=14m20s)
-    * https://en.wikipedia.org/wiki/Mersenne_conjectures
-    * ∀x,y,z ∈ ℤ⁺, 313 * (x^3 + y^3) ≠ z^3
-      - For all positive integer values of x, y, and z, 313 * (x^3 + y^3) = z^3 has no solutions
-      - Lets try to find a counterexample in Ruby:
-        ```
-        NATURAL_NUMBERS = 0..Float::INFINITY
-
-        def f(x, y)
-          313 * (x ** 3 + y ** 3)
-        end
-
-        NATURAL_NUMBERS.first(100_000).each do |x|
-          NATURAL_NUMBERS.first(100_000).each do |y|
-            NATURAL_NUMBERS.first(100_000).each do |z|
-              puts "#{x}, #{y}, #{z}" if f(x, y) == z ** 3
-            end
-          end
-        end
-        ```
