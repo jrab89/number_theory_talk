@@ -492,8 +492,17 @@ cipher_text = cipher.update(plain_text) + cipher.final
 ```
 
 ???
-TODO
-
+In pratice, we can do this in Ruby using AES, which is a commonly used algorithm for symmetric encryption.
+We call new on the AES class, passing in the size of the key we want to use, 256 bits in this base.
+We also need to give it a cipher mode. Here we're using CBC, which stands for cipher block chaining.
+Since we're using cipher block chaining, we also need an initialization vector.
+This is used to encrypt each 128 bit block of our plain text differently.
+We tell our instance of the AES class that we want to use it for encryption.
+We also tell it our key, and our initialization vector.
+Then to generate the cipher text, we call update on the cipher, passing in the plain text.
+Since we're using cipher block chaining, we also need to append the final output of the chaining process.
+This is which is what adding 'cipher.final' does.
+We're left with the cipher text, which you need the key and initialization vector to decrypt.
 
 ---
 
