@@ -205,6 +205,10 @@ Here's how you could find these in Ruby.
 You could take powers of 2, subtract 1 from them, and then keep the ones that are prime.
 Here's the first 8. The 5th one here should look familiar, that's our friend 8191.
 That last one here, 2,147,483,647, was first discovered by the Swiss mathematician Leonhard Euler in 1772.
+Does anyone know why else this number is important in computing?
+It also happens to be the max positive value for a 32-bit signed integer.
+This doesn't come up in Ruby much since Fixnums are automatically converted to Bignums automatically,
+but it's definitely something to watch out for if you're working with really big numbers in a language like Java or C.
 
 ---
 
@@ -563,4 +567,3 @@ Across many fields, a proof is a method for ascertaining truth:
           end
         end
         ```
-
