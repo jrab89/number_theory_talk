@@ -21,12 +21,30 @@ which also comes up in Star Trek and Doctor Who.
 
 ---
 
-# About me...
+.jv[
+  ![Jellyvision](jv_logo.png)
+  ![Alex](alex.png)
+]
 
-![Jellyvision](jv_logo.png)
+--
+
+.logos[
+  ![Ruby](Ruby_logo.png)
+  ![Python](python_logo.png)
+  ![JavaScript](js_logo.png)
+  ![PHP](php_logo.png)
+  ![AWS](aws_logo.png)
+]
 
 ???
-TODO
+First a little bit about myself.
+I'm an engineer at Jellyvision, here in Chicago.
+We make Alex, which is an interactive conversation that helps people make difficult decisions,
+decisions like selecting which health insurance plan is best for you and your family.
+We use Ruby, Python, JavaScript, PHP, and also Amazon Web Services.
+Like most other software companies, we're hiring.
+If any of these things are interesting to you and you happen to be looking for a job,
+maybe consider working at Jellyvision.
 
 ---
 
@@ -630,3 +648,4 @@ Before we get into Number Theory, I'd like to talk about Larry Wall a bit. For t
 I think these are some really valuably insights that can lead us to better solve problems, and also solve the better problems. I also think they make for three really good reasons that you probably shouldn't be writing your own cyptographic code, especially when it would be really bad if it didn't exactly work as you had intended.
 
 That being said a great way to learn about Number Theory and Cryptography (or really anything) is do it yourself! And yeah maybe even use it on your blog or your iPhone app your working on that lets people share where with eachother where all the best Pokemons are at! But probably don't use your own cryptosystem if your trying to do things like protect people's medical or financial data.
+
