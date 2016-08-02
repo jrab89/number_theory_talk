@@ -537,16 +537,65 @@ We need something different, and Number Theory can help.
 ![Public_key_encryption.svg](Public_key.svg)
 
 ???
-TODO
+In public key cryptography, instead of having a single key which is shared, instead we have key pairs.
+To send a message to someone securely, all you need is their public key.
+You use this public key to encrypt your message. The only way to decrypt this message is with the private key.
+In this example I use Amazon's public key to encrypt my credit card number, then I send them the cipher text over the internet.
+Since they have the private key, they're able to use that to decrypt my credit card number.
+This is really awesome since it allows us to secure communations between two parties without them needing a shared secret.
+But how does this work? How are the public and private keys linked?
 
+---
 
+```ruby
+class Integer
+  def phi
+    (1..self).count { |n| n.gcd(self) == 1 }
+  end
+end
 
+9.phi
+# => 6
+(1..8).select { |n| n.gcd(9) == 1 }
+# => [1, 2, 4, 5, 7, 8]
 
+8191.phi
+# => 8190
+```
 
+???
+Before we get into this, there's one other function you should know about.
+It's called Euler's Phi Function, or just phi for short, and yes it's named after the same Euler we were talking about earlier.
+This function, sort of describes the breakability of a number.
+Given n, the value of phi of n is the count of integers up to n that are relatively prime with n.
+For two numbers to be relatively prime, their greatest common divisor must be 1.
+For example, phi(9) is 6, since six numbers are less than 9 that are relatively prime with it.
+These are: 1, 2, 4, 5, 7 and 8. None of them have a common divisor greater than 1, with 9.
+When we compute phi for a prime, we get that prime minus 1.
+This is because the only numbers that divide a prime number are 1 and that number itself,
+so all the numbers below that prime are relatively prime with it.
+This makes phi really easy to compute for prime numbers, we don't need to search all the numbers below.
+We just need to subtract 1.
 
+---
 
+```ruby
+21.phi * 37.phi == (21 * 37).phi
+# => true
 
+(8191 * 7).phi == (8191 - 1) * (7 - 1)
+# => true
+```
 
+Phi is also multiplicative.
+This means phi of two numbers multiplied together is the same as phi of those numbers individually, then multiplied.
+This makes it easy to compute phi of the product of two prime numbers,
+since this would just be 1 minus each of those numbers multiplied together.
+For example, since we know that 8191 and 7 are prime, we know that phi(8191 * 7) equals (8191 - 1) * (7 - 1).
+This property of prime numbers and the phi function is what allows us to use two prime numbers as parts of a key pair,
+we designate one prime to be the public key and the other to be the private key.
+
+---
 
 
 
