@@ -586,7 +586,7 @@ We just need to subtract 1.
 (8191 * 7).phi == (8191 - 1) * (7 - 1)
 # => true
 ```
-
+???
 Phi is also multiplicative.
 This means phi of two numbers multiplied together is the same as phi of those numbers individually, then multiplied.
 This makes it easy to compute phi of the product of two prime numbers,
@@ -597,60 +597,129 @@ we designate one prime to be the public key and the other to be the private key.
 
 ---
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
----
-
 ```ruby
 require 'prime'
 
-primes = (0..Float::INFINITY).select(&:prime?)
+Prime.prime_division(77)
+# => [[7, 1], [11, 1]]
+
+77.phi == (11 - 1) * (7 - 1)
 ```
 
 ???
-Primes are neat! But how many are there? Maybe you can just count them all? Computers are fast, right?
-This is not going to do you much good, unless you need your computer to get hot, maybe to warm up your coffee?
+So phi of some number is easy to compute if we know the prime factors of that number,
+and it's hard to computer otherwise.
+If we know that 77 has the prime factors 11 and 7, then computing phi(77) is easy,
+it's just (11 - 1) * (7 - 1).
+If we don't know 77's prime factors, then computing phi(77) is much harder,
+the only other option is to search all the numbers less than it.
 
 ---
 
-background-image: url(Euclid.jpg)
+# Euler's Theorem
+
+```ruby
+(m ** n.phi) % n == 1
+```
+
+### This works for __any__ __m__ and __n__ that are __relatively prime__
+
+```ruby
+8.phi
+# => 4
+
+5 ** 4
+# => 625
+
+625 % 8
+# => 1
+```
 
 ???
-It turns out there are infinitely many primes!
-Over 2000 years ago, this was proven by this Greek guy, Euclid.
-He's often refered to as "the father of geometry",
-so you can thank him for all of the stuff you learned about triangles and parallel lines from when you were in high school.
-This proof is one of the big proofs in mathematics, and many mathematicians consider it to be very elegant and beautiful.
+That leads us to Euler's Theorem.
+Yes this is yet another Euler thing, sorry there are a lot of Euler things.
+For example 5 and 8: phi(8) is 4, 5^4 is 625, 625 mod 8 is 1.
 
 ---
 
-TODO: infinite primes proof
-https://www.youtube.com/watch?v=ctC33JAV4FI
-https://en.wikipedia.org/wiki/Euclid%27s_theorem
+# RSA
 
----
+```ruby
+prime_1 = 53
+prime_2 = 59
+n = prime_1 * prime_2
+# => 3127
 
-background-image: url(Plimpton_322.jpg)
+n.phi
+# => 3016
+
+public_exponent = 3
+private_exponent = (2 * n.phi + 1) / public_exponent
+# => 2011
+```
 
 ???
-How long has have people been concerned with Number Theory?
+And with that we can show how RSA works,
+RSA is one of the oldest public key cryptosystems, it was published publicly in 1977.
+It is still widely used today. Back to our example of public key crypto earlier.
+Amazon needs a key pair so I can securely send my credit card number.
+Here's an example of how they could generate a keypair.
+First they pick 2 random prime numbers. The product of these is n.
+n is the first part of the public key.
+Since they know both primes they can easily compute phi(n).
+Next to complete the public key, a public exponent is needed, it has to be relatively prime with phi(n).
+So 3 works.
+Finally the private key can be computed, we need one such that the '(private_exponent * public_exponent) % n.phi == 1'.
+Cool, so now on Amazon's side, they have a public and private key.
+Now they're ready to hand me the public keys so that I can send a message that only they can decrypt.
+
+---
+
+# Encrypt
+
+```ruby
+n = 3127
+public_exponent = 3
+message = 1234
+cipher_text = (message ** public_exponent) % n
+# => 937
+```
+
+???
+On my end, to send a message that only Amazon can decrypt,
+I take my message and raise it to the public exponent, then I mod that by n.
+That leaves us with the cipher text which we can safely send back to Amazon.
+
+---
+
+# Decrypt
+
+```ruby
+(cipher_text ** private_exponent) % n
+# => 1234
+```
+
+???
+Then on Amazon's side, they recieve my cipher text,
+and to decrypt, they raise it to their private exponent and mod that by n.
+This results in the origional message, 1234.
+
+---
+
+# How could you attack this?
+
+```ruby
+n = 3127
+public_exponent = 3
+cipher_text = 937
+```
+
+???
+In this example, these are the only numbers that get sent over the internet.
+An attacker would need the private exponent, which they could compute if they compute phi(n),
+But in practice, and with numbers much, much, larger than these, this takes hundreds of years, even for modern computers.
+The only reason Amazon was able to compute phi(n) was that they had the prime factors of n.
+If you don't have those prime factors, you're stuck with the numbers we have on the screen here.
 
 ---
 
@@ -660,59 +729,10 @@ How long has have people been concerned with Number Theory?
 
 ![Gauss](gauss.jpg)
 
----
-
-# But first...
-
---
-
-
-![Larry Wall](Larry_Wall.jpg)
-
-
---
-
-# Larry's Three Great Virtues of a Programmer:
-
 ???
-Before we get into Number Theory, I'd like to talk about Larry Wall a bit. For those of who don't know, Larry Wall is the author of the Perl programming language. But wait! This is a Ruby Meetup, why are we talking about Perl? Well, we're not really talking about Perl, but even if we were I don't think that would necessarily be crazy since Ruby was heavily inspired by Perl. But what I would like to touch on is Larry Wall's three virtues of a great programmer.
-
----
-
-# 1. Laziness
-
-  _"The quality that makes you go to great effort to reduce overall energy expenditure. It makes you write labor-saving programs that other people will find useful, and document what you wrote so you don't have to answer so many questions about it. Hence, the first great virtue of a programmer."_
-
----
-
-# 2. Impatence
-
-  _"The anger you feel when the computer is being lazy. This makes you write programs that don't just react to your needs, but actually anticipate them. Or at least pretend to. Hence, the second great virtue of a programmer."_
-
----
-
-# 3. Hubris
-
-  _"Excessive pride, the sort of thing Zeus zaps you for. Also the quality that makes you write (and maintain) programs that other people won't want to say bad things about. Hence, the third great virtue of a programmer."_
-
----
-
-# And now for the disclaimer...
-
---
-
-1. Be lazy, someone else has already done it for you
-
---
-
-2. Be impatent, review takes a long time
-
---
-
-3. Have hubris, avoid people saying bad things about your software by not writing it to begin with
-
-???
-I think these are some really valuably insights that can lead us to better solve problems, and also solve the better problems. I also think they make for three really good reasons that you probably shouldn't be writing your own cyptographic code, especially when it would be really bad if it didn't exactly work as you had intended.
-
-That being said a great way to learn about Number Theory and Cryptography (or really anything) is do it yourself! And yeah maybe even use it on your blog or your iPhone app your working on that lets people share where with eachother where all the best Pokemons are at! But probably don't use your own cryptosystem if your trying to do things like protect people's medical or financial data.
-
+I'll leave you with a quote from Gauss, who was a German mathematician.
+So the next time you buy something online or login to Pokemon go,
+whether you realize it or not,
+you're using algorithms whose strength comes from the properties of the natural numbers,
+properties that people have studied for thousands of years,
+and also properties that writers of The Simpsons find amusing.
