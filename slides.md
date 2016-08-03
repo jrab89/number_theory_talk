@@ -5,6 +5,8 @@ class: middle, center
 
 # Number Theory: Why Cryptography Works
 
+### https://github.com/jrab89
+
 ![The_Wizard_of_Evergreen_Terrace](The_Wizard_of_Evergreen_Terrace.jpg)
 
 _"The Wizard of Evergreen Terrace"_
