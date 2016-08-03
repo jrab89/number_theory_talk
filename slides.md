@@ -453,7 +453,7 @@ We all use these things on a daily basis, and probably most of the time we don't
 
 # Symmetric key encryption
 
-![symmetric_key_encryption](Symmetric_key.svg)
+![symmetric_key_encryption](symmetric_key.svg)
 
 ???
 Cryptography is about constructing and analyzing systems that prevent third parties from reading private messages.
